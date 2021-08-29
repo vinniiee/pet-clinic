@@ -5,7 +5,9 @@ import com.springframework.petclinic.model.Vet;
 import com.springframework.petclinic.services.OwnerService;
 import com.springframework.petclinic.services.VetService;
 import org.springframework.boot.CommandLineRunner;
+import org.springframework.stereotype.Component;
 
+@Component
 public class DataLoader implements CommandLineRunner {
 
     private OwnerService ownerService;
