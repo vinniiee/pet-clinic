@@ -1,7 +1,11 @@
 package com.springframework.petclinic.model;
 
-public class Person extends BaseEntity{
+import javax.persistence.Column;
+import javax.persistence.MappedSuperclass;
 
+@MappedSuperclass
+public class Person extends BaseEntity{
+    @Column(name = "first_name")
     private String firstName;
     private String lastName;
 
