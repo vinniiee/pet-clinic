@@ -1,18 +1,20 @@
 package com.springframework.petclinic.model;
 
-import javax.persistence.*;
+import javax.persistence.Entity;
+import javax.persistence.OneToMany;
 import java.util.HashSet;
 import java.util.Set;
+
 @Entity
-@Table(name = "owners")
 public class Owner extends Person{
-    @Column
+
     private String address;
-    @Column
+
     private String city;
-    @Column
+
     private String phone;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy="owner")
+
+    @OneToMany(mappedBy = "owner")
     private Set<Pet> pets = new HashSet<>();
 
     public String getAddress() {
@@ -43,7 +45,7 @@ public class Owner extends Person{
         return pets;
     }
 
-    public void setPets(Set<Pet> pets) {
-        this.pets = pets;
+    public void setPets(Pet pet) {
+        this.pets.add(pet);
     }
 }

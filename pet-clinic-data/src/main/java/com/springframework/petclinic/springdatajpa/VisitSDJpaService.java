@@ -1,4 +1,4 @@
-package com.springframework.petclinic.services.mapservice;
+package com.springframework.petclinic.springdatajpa;
 
 import com.springframework.petclinic.model.Visit;
 import com.springframework.petclinic.repositories.VisitRepository;
@@ -9,39 +9,39 @@ import org.springframework.stereotype.Service;
 import java.util.HashSet;
 import java.util.Set;
 @Service
-@Profile({"default", "map"})
-public class VisitMapService extends AbstractMapService<Visit,Long> implements VisitService{
+@Profile("springdatajpa")
+public class VisitSDJpaService implements VisitService {
 
-    private VisitRepository visitRepository;
-
-    public VisitMapService(VisitRepository visitRepository) {
+    public VisitSDJpaService(VisitRepository visitRepository) {
         this.visitRepository = visitRepository;
     }
+
+    private final VisitRepository visitRepository;
 
     @Override
     public Set<Visit> findAll() {
         Set<Visit> visits = new HashSet<>();
         visitRepository.findAll().forEach(visits::add);
-        return super.findAll();
+        return visits;
     }
 
     @Override
-    public void delete(Visit object) {
-        super.delete(object);
-    }
-
-    @Override
-    public void deleteById(Long id) {
-        super.deleteById(id);
+    public Visit findById(Long aLong) {
+        return visitRepository.findById(aLong).orElse(null);
     }
 
     @Override
     public Visit save(Visit object) {
-        return super.save(object);
+        return visitRepository.save(object);
     }
 
     @Override
-    public Visit findById(Long id) {
-        return super.findById(id);
+    public void deleteById(Long aLong) {
+        visitRepository.deleteById(aLong);
+    }
+
+    @Override
+    public void delete(Visit object) {
+        visitRepository.delete(object);
     }
 }

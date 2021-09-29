@@ -1,10 +1,7 @@
 package com.springframework.petclinic.bootstrap;
 
 import com.springframework.petclinic.model.*;
-import com.springframework.petclinic.services.OwnerService;
-import com.springframework.petclinic.services.PetTypeService;
-import com.springframework.petclinic.services.SpecialityService;
-import com.springframework.petclinic.services.VetService;
+import com.springframework.petclinic.services.*;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
@@ -13,25 +10,30 @@ import java.time.LocalDate;
 @Component
 public class DataLoader implements CommandLineRunner {
 
-    private OwnerService ownerService;
-    private VetService vetService;
-    private PetTypeService petTypeService;
-    private SpecialityService specialityService;
+    private final OwnerService ownerService;
+    private final VetService vetService;
+    private final PetTypeService petTypeService;
+    private final SpecialityService specialityService;
+    private final VisitService visitService;
+    private final PetService petService;
 
-    public DataLoader(OwnerService ownerService, VetService vetService, PetTypeService petTypeService, SpecialityService specialityService) {
+    public DataLoader(OwnerService ownerService, VetService vetService,
+                      PetTypeService petTypeService, SpecialityService specialityService,
+                      VisitService visitService, PetService petService) {
         this.ownerService = ownerService;
         this.vetService = vetService;
         this.petTypeService = petTypeService;
         this.specialityService = specialityService;
+        this.visitService = visitService;
+        this.petService = petService;
     }
+
 
     @Override
     public void run(String... args) throws Exception {
         if( petTypeService.findAll().size() == 0 ){
             loadData();
         }
-
-
     }
 
     private void loadData() {
@@ -40,7 +42,7 @@ public class DataLoader implements CommandLineRunner {
         PetType savedDogType = petTypeService.save(dog);
 
         PetType cat = new PetType();
-        dog.setName("Cat");
+        cat.setName("Cat");
         PetType savedCatType = petTypeService.save(cat);
 
         Owner owner1 = new Owner();
@@ -50,14 +52,15 @@ public class DataLoader implements CommandLineRunner {
         owner1.setAddress("123 Brickerel");
         owner1.setCity("Miami");
         owner1.setPhone("1231231234");
+        Owner savedOwner1 = ownerService.save(owner1);
 
         Pet mikesPet = new Pet();
         mikesPet.setPetType(savedDogType);
-        mikesPet.setOwner(owner1);
+        mikesPet.setOwner(savedOwner1);
         mikesPet.setBirthDate(LocalDate.now());
         mikesPet.setName("Rosco");
-        owner1.getPets().add(mikesPet);
-        ownerService.save(owner1);
+        petService.save(mikesPet);
+
 
         Owner owner2 = new Owner();
 
@@ -66,16 +69,24 @@ public class DataLoader implements CommandLineRunner {
         owner2.setAddress("123 Brickerel");
         owner2.setCity("Miami");
         owner2.setPhone("1231231234");
+        Owner savedOwnerService = ownerService.save(owner2);
 
         Pet fionasCat = new Pet();
         fionasCat.setName("Just Cat");
-        fionasCat.setOwner(owner2);
+        fionasCat.setOwner(savedOwnerService);
         fionasCat.setBirthDate(LocalDate.now());
         fionasCat.setPetType(savedCatType);
-        owner2.getPets().add(fionasCat);
-        ownerService.save(owner2);
+        Pet savedFionasCat = petService.save(fionasCat);
+
 
         System.out.println("Loaded Owners....");
+
+        Visit catVisit = new Visit();
+        catVisit.setPet(savedFionasCat);
+        catVisit.setDate(LocalDate.now());
+        catVisit.setDescription("Sneezy Kitty");
+
+        visitService.save(catVisit);
 
         Speciality speciality1 = new Speciality();
         speciality1.setDescription("radiology");
@@ -89,7 +100,7 @@ public class DataLoader implements CommandLineRunner {
         vetService.save(vet1);
 
         Speciality speciality2 = new Speciality();
-        speciality1.setDescription("surgery");
+        speciality2.setDescription("surgery");
         Speciality surgery = specialityService.save(speciality2);
 
 

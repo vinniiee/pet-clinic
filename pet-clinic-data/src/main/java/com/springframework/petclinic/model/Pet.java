@@ -1,25 +1,26 @@
 package com.springframework.petclinic.model;
 
-import javax.persistence.*;
+import javax.persistence.Entity;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.Set;
 
 @Entity
 public class Pet extends BaseEntity{
+
     @ManyToOne
-    @JoinColumn(name = "type_id")
     private PetType petType;
 
     @ManyToOne
-    @JoinColumn(name = "owner_id")
     private Owner owner;
-    @Column
+
     private LocalDate birthDate;
-    @Column
+
     private String name;
 
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "pet")
+    @OneToMany(mappedBy = "pet")
     private Set<Visit> visits = new HashSet<>();
 
 
@@ -37,6 +38,7 @@ public class Pet extends BaseEntity{
 
     public void setOwner(Owner owner) {
         this.owner = owner;
+        owner.setPets(this);
     }
 
     public LocalDate getBirthDate() {
@@ -55,4 +57,12 @@ public class Pet extends BaseEntity{
         this.name = name;
     }
 
+    public Set<Visit> getVisits() {
+        return visits;
+    }
+
+    public void setVisits(Visit visit) {
+        this.visits.add(visit);
+        visit.setPet(this);
+    }
 }
