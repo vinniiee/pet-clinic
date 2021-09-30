@@ -25,4 +25,11 @@ public class Owner extends Person{
     public void setPets(Pet pet) {
         this.pets.add(pet);
     }
+    public Owner(Long id, String firstName, String lastName, String address, String city, String phone, Set<Pet> pets) {
+        super(id, firstName, lastName);
+        this.address = address;
+        this.city = city;
+        this.phone = phone;
+        this.pets = pets;
+    }
 }

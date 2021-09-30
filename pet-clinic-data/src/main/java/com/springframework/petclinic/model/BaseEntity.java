@@ -19,5 +19,4 @@ public class BaseEntity implements Serializable {
     @GeneratedValue
     private Long id;
 
-
 }
