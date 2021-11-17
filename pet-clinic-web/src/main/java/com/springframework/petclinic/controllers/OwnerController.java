@@ -61,6 +61,7 @@ public class OwnerController {
         else if (ownersResults.size() == 1) {
             // 1 owner found
             owner = ownersResults.get(0);
+            owner = ownersResults.get(0);
             return "redirect:/owners/" + owner.getId();
         }
         else {
