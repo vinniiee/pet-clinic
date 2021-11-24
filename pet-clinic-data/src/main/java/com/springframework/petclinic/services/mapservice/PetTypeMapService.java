@@ -33,4 +33,9 @@ public class PetTypeMapService extends AbstractMapService<PetType,Long> implemen
     public void delete(PetType object) {
         super.delete(object);
     }
+
+    @Override
+    public PetType findByName(String name) {
+        return null;
+    }
 }
